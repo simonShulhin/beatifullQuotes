@@ -1,28 +1,51 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <quotes-counter
+      :quoteCount="quotes.length"
+      :maxQuotes="maxValue"
+    ></quotes-counter>
+    <new-quote @quoteAdded="addNewQuote"></new-quote>
+    <grid-quotes>
+      <div class="quote" v-for="(quote, index) in quotes" :key="index" @click="deleteQuote(index)">
+        {{ quote }}
+      </div>
+    </grid-quotes>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import GridQuotes from './components/GridQuotes.vue';
+import QuotesCounter from './components/QuotesCounter.vue';
+import NewQuote from './components/NewQuote.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    GridQuotes,
+    QuotesCounter,
+    NewQuote,
+  },
+  data: () => ({
+    maxValue: 10,
+    quotes: ['Start beautifull quote!', 'Test'],
+  }),
+
+  methods: {
+    addNewQuote(quote) {
+      this.quotes.length === this.maxValue
+        ? alert(`It's no place for new quotes. Please delete old one!`)
+        : this.quotes.push(quote);
+    },
+
+    deleteQuote(i) {
+      this.quotes.splice(i, 1);
+    }
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 40px;
 }
 </style>
